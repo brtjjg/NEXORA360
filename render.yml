@@ -1,9 +1,9 @@
 # render.yaml
 services:
   - type: web
-    name: nexora-backend
+    name: NEXORA360-backend
     env: node
-    plan: starter
+    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
@@ -35,19 +35,19 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CORS_ORIGIN
-        value: https://nexora-frontend.onrender.com
+        value: https://nexora360.onrender.com
 
   - type: web
-    name: nexora-frontend
+    name: NEXORA360-frontend
     env: static
-    plan: starter
+    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://nexora-backend.onrender.com/api
+        value: https://nexora360-backend.onrender.com/api
 
 databases:
   - name: nexora-db
-    plan: starter
+    plan: free
