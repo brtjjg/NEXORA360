@@ -195,4 +195,52 @@ const AdminDashboard = () => {
         { path: 'disputes', label: '⚠️ Disputes' },
         { path: 'promotions', label: '🎟️ Promotions' },
         { path: 'notifications', label: '📣 Notifications' },
-        { path: 'analytics',
+        { path: 'analytics', label: '📈 Analytics' },
+        { path: 'settings', label: '⚙️ Settings' }
+    ];
+
+    return (
+        <div className="admin-dashboard">
+            <aside className="admin-sidebar">
+                <div className="sidebar-header">
+                    <h2>👑 Admin</h2>
+                    <p>{user?.full_name}</p>
+                </div>
+                <nav className="sidebar-nav">
+                    {navItems.map((item) => (
+                        <Link 
+                            key={item.path}
+                            to={`/admin/dashboard/${item.path}`}
+                            className="nav-link"
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </nav>
+                <button className="logout-btn" onClick={handleLogout}>
+                    🚪 Logout
+                </button>
+            </aside>
+
+            <main className="admin-content">
+                <Routes>
+                    <Route path="/" element={<DashboardOverview />} />
+                    <Route path="/users" element={<UsersManagement />} />
+                    <Route path="/providers" element={<div>Providers Management</div>} />
+                    <Route path="/services" element={<div>Services Management</div>} />
+                    <Route path="/orders" element={<div>Orders Management</div>} />
+                    <Route path="/payments" element={<div>Payments Management</div>} />
+                    <Route path="/commissions" element={<div>Commissions Settings</div>} />
+                    <Route path="/reviews" element={<div>Reviews Management</div>} />
+                    <Route path="/disputes" element={<div>Disputes Resolution</div>} />
+                    <Route path="/promotions" element={<div>Promotions Manager</div>} />
+                    <Route path="/notifications" element={<div>Send Notifications</div>} />
+                    <Route path="/analytics" element={<div>Analytics Dashboard</div>} />
+                    <Route path="/settings" element={<div>System Settings</div>} />
+                </Routes>
+            </main>
+        </div>
+    );
+};
+
+export default AdminDashboard;
