@@ -252,4 +252,19 @@ router.patch('/orders/:id/status', authMiddleware, adminMiddleware, async (req, 
 // Get audit logs
 router.get('/audit-logs', authMiddleware, adminMiddleware, async (req, res) => {
     try {
-        const limit = parseInt(req.query.limit)
+        const limit = parseInt(req.query.limit) || 100;
+        const query = `
+            SELECT al.*, u.full_name, u.email
+            FROM audit_logs al
+            LEFT JOIN users u ON al.user_id = u.id
+            ORDER BY al.created_at DESC
+            LIMIT $1
+        `;
+        const result = await pool.query(query, [limit]);
+        res.json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+module.exports = router;
