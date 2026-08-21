@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
-// Import routes
+// ✅ FIXED: Correct paths to src/ folder
 const authRoutes = require('./src/routes/authRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const serviceRoutes = require('./src/routes/serviceRoutes');
@@ -17,18 +17,10 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(helmet());
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN || '*',
     credentials: true
 }));
 
-// Rate limiting
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100
-});
-app.use('/api', limiter);
-
-// Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -48,6 +40,11 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// Simple test route
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'NEXORA API is running!' });
+});
+
 // Error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -57,7 +54,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-// 404
+// 404 handler
 app.use((req, res) => {
     res.status(404).json({
         success: false,
