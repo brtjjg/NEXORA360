@@ -1,0 +1,53 @@
+# render.yaml
+services:
+  - type: web
+    name: nexora-backend
+    env: node
+    plan: starter
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DB_HOST
+        fromDatabase:
+          name: nexora-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: nexora-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: nexora-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: nexora-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: nexora-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://nexora-frontend.onrender.com
+
+  - type: web
+    name: nexora-frontend
+    env: static
+    plan: starter
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://nexora-backend.onrender.com/api
+
+databases:
+  - name: nexora-db
+    plan: starter
